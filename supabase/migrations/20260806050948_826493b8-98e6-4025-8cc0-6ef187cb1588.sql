@@ -1,0 +1,1 @@
+ALTER TABLE public.events ADD COLUMN IF NOT EXISTS all_day boolean NOT NULL DEFAULT false;

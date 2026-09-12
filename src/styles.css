@@ -5,17 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * Calendry Mobile — Organic & Earthy design system.
+ * Palette based on the Calendry design_guidelines.json:
+ * ivory app bg, warm brown text, muted earthy tag swatches.
  */
 
 @theme inline {
@@ -26,6 +18,10 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -46,99 +42,146 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-ivory: var(--ivory);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-clay: var(--clay);
+  --color-clay-soft: var(--clay-soft);
+  --color-clay-muted: var(--clay-muted);
+  --color-hairline: var(--hairline);
+  --color-olive: var(--olive);
+  --color-brown: var(--brown);
+
+  --color-tag-blue: var(--tag-blue);
+  --color-tag-blue-bg: var(--tag-blue-bg);
+  --color-tag-red: var(--tag-red);
+  --color-tag-red-bg: var(--tag-red-bg);
+  --color-tag-green: var(--tag-green);
+  --color-tag-green-bg: var(--tag-green-bg);
+  --color-tag-yellow: var(--tag-yellow);
+  --color-tag-yellow-bg: var(--tag-yellow-bg);
+  --color-tag-orange: var(--tag-orange);
+  --color-tag-orange-bg: var(--tag-orange-bg);
+  --color-tag-teal: var(--tag-teal);
+  --color-tag-teal-bg: var(--tag-teal-bg);
+  --color-tag-purple: var(--tag-purple);
+  --color-tag-purple-bg: var(--tag-purple-bg);
+  --color-tag-pink: var(--tag-pink);
+  --color-tag-pink-bg: var(--tag-pink-bg);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --radius: 1rem;
+
+  --ivory: #FAF8F5;
+  --surface: #FFFFFF;
+  --surface-hover: #F2EFEB;
+  --clay: #4A3F35;
+  --clay-soft: #8A7D71;
+  --clay-muted: #B5A89E;
+  --hairline: #EADDD7;
+  --olive: #7A8B76;
+  --brown: #735E4F;
+
+  --tag-blue: #547A82;
+  --tag-blue-bg: #E0ECEE;
+  --tag-red: #A35C65;
+  --tag-red-bg: #F5E4E6;
+  --tag-green: #617A4D;
+  --tag-green-bg: #E5EEDB;
+  --tag-yellow: #8C7A33;
+  --tag-yellow-bg: #F8F1D7;
+  --tag-orange: #A8734A;
+  --tag-orange-bg: #F4E5D8;
+  --tag-teal: #4A827F;
+  --tag-teal-bg: #DEEBEA;
+  --tag-purple: #7A5E7A;
+  --tag-purple-bg: #EAE3EA;
+  --tag-pink: #A35C8A;
+  --tag-pink-bg: #F5E3ED;
+
+  --background: var(--ivory);
+  --foreground: var(--clay);
+  --card: var(--surface);
+  --card-foreground: var(--clay);
+  --popover: var(--surface);
+  --popover-foreground: var(--clay);
+  --primary: var(--clay);
+  --primary-foreground: var(--ivory);
+  --secondary: var(--surface-hover);
+  --secondary-foreground: var(--clay);
+  --muted: var(--surface-hover);
+  --muted-foreground: var(--clay-soft);
+  --accent: var(--hairline);
+  --accent-foreground: var(--clay);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --destructive-foreground: var(--ivory);
+  --border: var(--hairline);
+  --input: var(--hairline);
+  --ring: var(--clay);
 }
 
+/* Dark theme — cool slate night, mirroring the Calendry web "dark" theme. */
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --ivory: #10141C;
+  --surface: #171C26;
+  --surface-hover: #262E3B;
+  --clay: #E7ECF3;
+  --clay-soft: #9BA4B4;
+  --clay-muted: #6E7789;
+  --hairline: #262E3B;
+  --olive: #8FA98A;
+  --brown: #C7A98F;
+
+  --tag-blue: #9CC2CB;
+  --tag-blue-bg: #131C21;
+  --tag-red: #D79AA2;
+  --tag-red-bg: #221417;
+  --tag-green: #A9C48C;
+  --tag-green-bg: #171D14;
+  --tag-yellow: #D6C271;
+  --tag-yellow-bg: #1E1C11;
+  --tag-orange: #DFAF85;
+  --tag-orange-bg: #211710;
+  --tag-teal: #8FC3C0;
+  --tag-teal-bg: #121D1C;
+  --tag-purple: #BEA1BE;
+  --tag-purple-bg: #1C161D;
+  --tag-pink: #DB9EC0;
+  --tag-pink-bg: #1F141A;
+
+
+  --primary: var(--clay);
+  --primary-foreground: var(--ivory);
+  --destructive: oklch(0.65 0.19 25);
 }
+
 
 @layer base {
   * {
     border-color: var(--color-border);
   }
-
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+  html, body {
+    background-color: var(--color-ivory);
+    color: var(--color-clay);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
+  body {
+    overscroll-behavior-y: none;
+  }
+  .font-serif { font-family: var(--font-serif); font-feature-settings: "ss01"; }
+}
+
+@utility hairline-b {
+  border-bottom: 1px solid var(--hairline);
+}
+@utility hairline-t {
+  border-top: 1px solid var(--hairline);
+}
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 }
