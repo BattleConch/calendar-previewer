@@ -15,9 +15,10 @@ type Prefs = {
   reminders: boolean;
   animations: boolean;
   weekStartMonday: boolean;
+  hideNotes: boolean;
 };
 
-const DEFAULTS: Prefs = { haptics: true, reminders: true, animations: true, weekStartMonday: false };
+const DEFAULTS: Prefs = { haptics: true, reminders: true, animations: true, weekStartMonday: false, hideNotes: false };
 const KEY = "calendry.settings";
 
 const THEME_OPTIONS: { id: ThemeMode; label: string; Icon: typeof Sun }[] = [
