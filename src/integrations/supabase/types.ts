@@ -14,7 +14,219 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      app_user_connections: {
+        Row: {
+          connection_key_ciphertext: string
+          connector_id: string
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          connection_key_ciphertext: string
+          connector_id: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          connection_key_ciphertext?: string
+          connector_id?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          all_day: boolean
+          created_at: string
+          date: string
+          end_time: string
+          google_calendar_id: string | null
+          google_event_id: string | null
+          id: string
+          is_owner: boolean
+          notes: string | null
+          organizer_email: string | null
+          organizer_name: string | null
+          recurring_event_id: string | null
+          reminders: string[]
+          source: string
+          start_time: string
+          tag: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          all_day?: boolean
+          created_at?: string
+          date: string
+          end_time?: string
+          google_calendar_id?: string | null
+          google_event_id?: string | null
+          id?: string
+          is_owner?: boolean
+          notes?: string | null
+          organizer_email?: string | null
+          organizer_name?: string | null
+          recurring_event_id?: string | null
+          reminders?: string[]
+          source?: string
+          start_time?: string
+          tag?: string
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          all_day?: boolean
+          created_at?: string
+          date?: string
+          end_time?: string
+          google_calendar_id?: string | null
+          google_event_id?: string | null
+          id?: string
+          is_owner?: boolean
+          notes?: string | null
+          organizer_email?: string | null
+          organizer_name?: string | null
+          recurring_event_id?: string | null
+          reminders?: string[]
+          source?: string
+          start_time?: string
+          tag?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notes: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          images: Json
+          position: number
+          tag: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          id?: string
+          images?: Json
+          position?: number
+          tag?: string | null
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          images?: Json
+          position?: number
+          tag?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          label: string
+          position: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id: string
+          label?: string
+          position?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          label?: string
+          position?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          created_at: string
+          done: boolean
+          due: string | null
+          google_list_id: string | null
+          google_task_id: string | null
+          id: string
+          notes: string | null
+          position: number
+          priority: string
+          reminders: string[]
+          source: string
+          tag: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          due?: string | null
+          google_list_id?: string | null
+          google_task_id?: string | null
+          id?: string
+          notes?: string | null
+          position?: number
+          priority?: string
+          reminders?: string[]
+          source?: string
+          tag?: string | null
+          title?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          due?: string | null
+          google_list_id?: string | null
+          google_task_id?: string | null
+          id?: string
+          notes?: string | null
+          position?: number
+          priority?: string
+          reminders?: string[]
+          source?: string
+          tag?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
