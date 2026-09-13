@@ -54,11 +54,11 @@ export function DaySheet({
             className="fixed inset-x-0 bottom-0 z-50 flex max-h-[92dvh] flex-col overflow-hidden rounded-t-[2rem] bg-surface"
             style={{ border: "1px solid var(--hairline)", boxShadow: "0 -20px 60px -30px rgba(74,63,53,0.5)" }}
           >
-            <div className="shrink-0 pt-3">
-              <div
-                onPointerDown={(e) => { haptic(9); dragControls.start(e); }}
-                className="mx-auto flex h-8 w-28 cursor-grab touch-none items-center justify-center active:cursor-grabbing"
-              >
+            <div
+              className="shrink-0 cursor-grab touch-none pt-3 active:cursor-grabbing"
+              onPointerDown={(e) => { haptic(9); dragControls.start(e); }}
+            >
+              <div className="mx-auto flex h-8 w-28 items-center justify-center">
                 <motion.div
                   whileTap={{ scaleX: 1.25, opacity: 0.9 }}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
