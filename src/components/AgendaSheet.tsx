@@ -6,6 +6,7 @@ import { useTags } from "@/lib/tags-store";
 import { useTasks } from "@/lib/tasks-store";
 import { useEffect, useRef, useState } from "react";
 import { haptic } from "@/lib/haptics";
+import { formatTime, useTimeFormat } from "@/lib/nav-prefs";
 
 const iso = (d: Date) => format(d, "yyyy-MM-dd");
 const HOUR_H = 56;
@@ -47,6 +48,7 @@ export function AgendaSheet({
   const { byDate } = useEvents();
   const { tasks } = useTasks();
   const { styleOf } = useTags();
+  const timeFormat = useTimeFormat();
   const [dir, setDir] = useState(0);
   const now = useNow();
   const nowMin = now ? now.getHours() * 60 + now.getMinutes() - DAY_START * 60 : null;
@@ -275,7 +277,7 @@ export function AgendaSheet({
                 {hours.map((h, i) => (
                   <div key={h} className="absolute left-0 right-0 flex items-start gap-3" style={{ top: i * HOUR_H, height: HOUR_H }}>
                     <div className="w-10 text-[10px] uppercase tracking-widest text-clay-muted">
-                      {h % 12 === 0 ? 12 : h % 12}{h < 12 ? "a" : "p"}
+                      {formatTime(`${String(h).padStart(2, "0")}:00`, timeFormat)}
                     </div>
                     <div className="flex-1 hairline-b" />
                   </div>
@@ -322,7 +324,7 @@ export function AgendaSheet({
                       }}
                     >
                       <div className="text-[10px] uppercase tracking-widest text-clay-soft">
-                        {minToLabel(draft.from)} – {minToLabel(draft.to)}
+                        {formatTime(minToLabel(draft.from), timeFormat)} – {formatTime(minToLabel(draft.to), timeFormat)}
                       </div>
                       <div className="font-serif text-base leading-tight text-clay">New event</div>
                     </motion.div>
@@ -350,7 +352,7 @@ export function AgendaSheet({
                       style={{ top, height, paddingTop: tiny ? 2 : 6, paddingBottom: tiny ? 2 : 6, background: s.bg, color: s.text, border: `1px solid ${s.dot}22` }}
                     >
                       {roomy && (
-                        <div className="text-[10px] uppercase tracking-widest opacity-70">{e.start} – {e.end}</div>
+                        <div className="text-[10px] uppercase tracking-widest opacity-70">{formatTime(e.start, timeFormat)} – {formatTime(e.end, timeFormat)}</div>
                       )}
                       <div
                         className={`w-full truncate font-serif leading-tight ${roomy ? "mt-0.5 text-base" : tiny ? "text-[10px]" : "text-sm"}`}

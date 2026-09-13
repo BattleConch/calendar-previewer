@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AlarmClock, Clock, X } from "lucide-react";
 import { useEvents } from "@/lib/events-store";
 import { haptic } from "@/lib/haptics";
+import { formatTime, useTimeFormat } from "@/lib/nav-prefs";
 
 type Alert = { key: string; title: string; body: string; at: number };
 
@@ -31,6 +32,7 @@ function startOf(dateISO: string, time: string) {
 
 export function ReminderAlerts() {
   const { events } = useEvents();
+  const timeFormat = useTimeFormat();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [snoozed, setSnoozed] = useState<Record<string, number>>({});
 
@@ -77,7 +79,7 @@ export function ReminderAlerts() {
             body:
               away <= 0
                 ? e.allDay ? "Today" : "Starting now"
-                : `Starts in ${away} min${e.allDay ? "" : ` · ${e.start}`}`,
+                : `Starts in ${away} min${e.allDay ? "" : ` · ${formatTime(e.start, timeFormat)}`}`,
             at,
           });
         }
@@ -96,7 +98,7 @@ export function ReminderAlerts() {
     const onFocus = () => check();
     window.addEventListener("focus", onFocus);
     return () => { clearInterval(id); window.removeEventListener("focus", onFocus); };
-  }, [events, snoozed]);
+  }, [events, snoozed, timeFormat]);
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-3 z-[75] flex flex-col items-center gap-2 px-3">

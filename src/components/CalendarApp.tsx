@@ -21,12 +21,14 @@ import { Onboarding } from "./Onboarding";
 import { useReminderScheduler } from "@/lib/notifications";
 
 import { haptic } from "@/lib/haptics";
+import { formatTime, useTimeFormat } from "@/lib/nav-prefs";
 
 const iso = (d: Date) => format(d, "yyyy-MM-dd");
 const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
 
 export function CalendarApp() {
   const { styleOf } = useTags();
+  const timeFormat = useTimeFormat();
   const [tab, setTab] = useState<Tab>("home");
   // Rendered after mount so the server/client date can never mismatch.
   const [todayLabel, setTodayLabel] = useState("");
@@ -298,7 +300,7 @@ export function CalendarApp() {
                           <span className="h-8 w-1 rounded-full" style={{ background: s.dot }} />
                           <div className="flex-1 min-w-0">
                             <div className="truncate text-[15px]">{e.title}</div>
-                            <div className="text-xs text-clay-soft">{e.allDay ? "All-day" : `${e.start} – ${e.end}`}</div>
+                            <div className="text-xs text-clay-soft">{e.allDay ? "All-day" : `${formatTime(e.start, timeFormat)} – ${formatTime(e.end, timeFormat)}`}</div>
                           </div>
                           <span className="rounded-full px-2 py-0.5 text-[10px] uppercase tracking-widest"
                             style={{ background: s.bg, color: s.text }}>

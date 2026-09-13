@@ -9,6 +9,7 @@ import { MyTagsButton } from "./TagsManager";
 import { useTasks } from "@/lib/tasks-store";
 import { useNotes } from "@/lib/notes-store";
 import { haptic } from "@/lib/haptics";
+import { formatTime, useTimeFormat } from "@/lib/nav-prefs";
 import type { Tab } from "./BottomNav";
 
 const iso = (d: Date) => format(d, "yyyy-MM-dd");
@@ -52,9 +53,10 @@ export function HomePage({
   const { tasks } = useTasks();
   const { notes } = useNotes();
   const { styleOf } = useTags();
+  const timeFormat = useTimeFormat();
   const dotOf = (tag?: TagColor) => (tag ? styleOf(tag).dot : "var(--clay-muted)");
 
-  const now = new Date();
+  const now = mounted ? new Date() : new Date("2020-01-05T12:00:00.000Z");
   const hour = now.getHours();
   const [mounted, setMounted] = useState(false);
   const [order, setOrder] = useState<WidgetId[]>(DEFAULT_ORDER);
@@ -140,7 +142,7 @@ export function HomePage({
       ) : (
         <div className="space-y-1.5">
           {todayEvents.slice(0, 4).map((e) => (
-            <Row key={e.id} color={dotOf(e.tag)} title={e.title} sub={`${e.start} – ${e.end}`} onClick={() => onEditEvent(e.id)} />
+            <Row key={e.id} color={dotOf(e.tag)} title={e.title} sub={`${formatTime(e.start, timeFormat)} – ${formatTime(e.end, timeFormat)}`} onClick={() => onEditEvent(e.id)} />
           ))}
           {todayTasks.slice(0, 4).map((t) => (
             <Row key={t.id} color={dotOf(t.tag)} title={t.title} sub="Due today" onClick={() => onEditTask(t.id)} check />
@@ -187,7 +189,7 @@ export function HomePage({
               key={e.id}
               color={dotOf(e.tag)}
               title={e.title}
-              sub={`${format(parseISO(e.date), "EEE, MMM d")} · ${e.start}`}
+              sub={`${format(parseISO(e.date), "EEE, MMM d")} · ${formatTime(e.start, timeFormat)}`}
               onClick={() => onEditEvent(e.id)}
             />
           ))}
@@ -241,9 +243,7 @@ export function HomePage({
         <div>
           <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">{greet}</div>
           <div className="mt-1 text-sm text-clay-soft">
-            {todayCount === 0
-              ? "No plans today — a clear page."
-              : `${todayCount} ${todayCount === 1 ? "thing" : "things"} on today.`}
+            {todayCount > 0 && `${todayCount} ${todayCount === 1 ? "thing" : "things"} on today.`}
             {pendingAll.length > 0 && ` ${pendingAll.length} open ${pendingAll.length === 1 ? "task" : "tasks"}.`}
           </div>
         </div>

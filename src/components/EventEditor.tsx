@@ -10,6 +10,7 @@ import { RemindersField } from "./RemindersField";
 import { EVENT_REMINDERS } from "@/lib/notifications";
 import { deleteGoogleEvent } from "@/lib/google-calendar.functions";
 import { haptic } from "@/lib/haptics";
+import { formatTime, useTimeFormat } from "@/lib/nav-prefs";
 
 
 
@@ -31,6 +32,7 @@ export function EventEditor({
   defaultEnd?: string;
 }) {
   const { events, add, update, remove } = useEvents();
+  const timeFormat = useTimeFormat();
   const existing = editingId ? events.find((e) => e.id === editingId) : null;
 
   const [title, setTitle] = useState("");
@@ -195,7 +197,7 @@ export function EventEditor({
                     <PreviewRow label="Date" value={format(parseISO(existing.date), "EEEE, d MMM yyyy")} />
                     <PreviewRow
                       label="Time"
-                      value={existing.allDay ? "All-day" : `${existing.start} – ${existing.end}`}
+                       value={existing.allDay ? "All-day" : `${formatTime(existing.start, timeFormat)} – ${formatTime(existing.end, timeFormat)}`}
                     />
                     {existing.source === "google" && !existing.isOwner && (existing.organizerName || existing.organizerEmail) ? (
                       <PreviewRow
