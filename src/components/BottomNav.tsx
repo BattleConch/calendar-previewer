@@ -1,17 +1,32 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { CalendarDays, CheckCircle2, Home, NotebookPen, Settings } from "lucide-react";
 import { haptic } from "@/lib/haptics";
+import { useHideNotes } from "@/lib/nav-prefs";
 
 export type Tab = "home" | "calendar" | "tasks" | "notes" | "settings";
 
+const ALL: { id: Tab; label: string; icon: React.ReactNode }[] = [
+  { id: "calendar", label: "Calendar", icon: <CalendarDays className="h-5 w-5" /> },
+  { id: "tasks", label: "Tasks", icon: <CheckCircle2 className="h-5 w-5" /> },
+  { id: "home", label: "Home", icon: <Home className="h-5 w-5" /> },
+  { id: "notes", label: "Notes", icon: <NotebookPen className="h-5 w-5" /> },
+  { id: "settings", label: "Settings", icon: <Settings className="h-5 w-5" /> },
+];
+
+const byId = (id: Tab) => ALL.find((i) => i.id === id)!;
+
 export function BottomNav({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
-  const items: { id: Tab; label: string; icon: React.ReactNode }[] = [
-    { id: "calendar", label: "Calendar", icon: <CalendarDays className="h-5 w-5" /> },
-    { id: "tasks", label: "Tasks", icon: <CheckCircle2 className="h-5 w-5" /> },
-    { id: "home", label: "Home", icon: <Home className="h-5 w-5" /> },
-    { id: "notes", label: "Notes", icon: <NotebookPen className="h-5 w-5" /> },
-    { id: "settings", label: "Settings", icon: <Settings className="h-5 w-5" /> },
-  ];
+  const hideNotes = useHideNotes();
+
+  // Notes hidden: Home slides to the front, Calendar and Tasks shift one spot right.
+  const items = hideNotes
+    ? [byId("home"), byId("calendar"), byId("tasks"), byId("settings")]
+    : ALL;
+
+  useEffect(() => {
+    if (hideNotes && tab === "notes") setTab("home");
+  }, [hideNotes, tab, setTab]);
 
   return (
     <nav
@@ -25,8 +40,10 @@ export function BottomNav({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void 
         {items.map((it) => {
           const active = tab === it.id;
           return (
-            <button
+            <motion.button
               key={it.id}
+              layout
+              transition={{ type: "spring", stiffness: 420, damping: 36 }}
               onClick={() => { haptic(8); setTab(it.id); }}
               aria-label={it.label}
               className="relative flex flex-1 items-center justify-center gap-2 rounded-full px-2 py-2.5 text-xs font-medium"
@@ -39,11 +56,11 @@ export function BottomNav({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void 
                   transition={{ type: "spring", stiffness: 500, damping: 40 }}
                 />
               )}
-              <span className="relative flex items-center gap-1.5">
+              <motion.span layout className="relative flex items-center gap-1.5">
                 {it.icon}
                 {active && <span className="whitespace-nowrap">{it.label}</span>}
-              </span>
-            </button>
+              </motion.span>
+            </motion.button>
           );
         })}
       </div>

@@ -96,23 +96,30 @@ export function useGoogleCalendar() {
 
   const connect = useCallback(async () => {
     setError(null);
-    const popup = window.open("", "calendry-google-oauth", "width=600,height=720");
-    if (!popup) {
-      setError("Allow pop-ups to connect Google.");
-      return;
-    }
     setBusy(true);
+    let popup: Window | null = null;
     try {
+      // Fetch the URL first, then open a fresh window straight at Google.
+      // Opening an empty window and navigating it later gets blocked inside
+      // embedded previews (Google refuses to load in that context).
       const { authorizationUrl } = await start();
-      const completion = waitForOAuthCompletion(popup);
-      popup.location.href = authorizationUrl;
-      const code = await completion;
+      popup = window.open(authorizationUrl, "calendry-google-oauth", "popup,width=600,height=720");
+      if (!popup) {
+        setError("Allow pop-ups for this site, then tap Connect Google again.");
+        return;
+      }
+      const code = await waitForOAuthCompletion(popup);
       if (code) await complete({ data: { code } });
       setConnected(true);
       await sync();
     } catch (e) {
-      popup.close();
-      setError(e instanceof Error ? e.message : "Could not connect Google.");
+      popup?.close();
+      const msg = e instanceof Error ? e.message : "Could not connect Google.";
+      setError(
+        window.self !== window.top
+          ? `${msg} Google blocks sign-in inside the embedded preview — open the app in its own browser tab and try again.`
+          : msg,
+      );
     } finally {
       setBusy(false);
       void refreshStatus();
