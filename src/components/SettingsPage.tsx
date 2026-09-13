@@ -5,6 +5,7 @@ import { haptic } from "@/lib/haptics";
 import { useTheme, type ThemeMode } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import { useGoogleSync } from "@/lib/google-sync";
+import { notifySettingsChanged } from "@/lib/nav-prefs";
 
 import { TagsManager } from "./TagsManager";
 import { Tags } from "lucide-react";
@@ -50,6 +51,7 @@ export function SettingsPage() {
     setPrefs((p) => {
       const next = { ...p, [k]: v };
       try { localStorage.setItem(KEY, JSON.stringify(next)); } catch {}
+      notifySettingsChanged();
       return next;
     });
   };
