@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Bell, Info, Moon, Sparkles, Vibrate, CalendarDays, Sun, Monitor, Cloud, CloudOff, LogOut, NotebookPen } from "lucide-react";
+import { Bell, Info, Moon, Sparkles, Vibrate, CalendarDays, Sun, Monitor, Cloud, CloudOff, LogOut, NotebookPen, Gift } from "lucide-react";
 import { haptic } from "@/lib/haptics";
 import { useTheme, type ThemeMode } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
@@ -64,9 +64,23 @@ export function SettingsPage() {
       transition={{ duration: 0.25 }}
       className="px-5"
     >
-      <div className="pt-1 pb-4">
-        <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">Preferences</div>
-        <p className="mt-1 text-sm text-clay-soft">Tune how Calendry feels.</p>
+      <div className="pt-1 pb-4 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">Preferences</div>
+          <p className="mt-1 text-sm text-clay-soft">Tune how Calendry feels.</p>
+        </div>
+        <a
+          href="https://www.buymeacoffee.com/battleconch"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => haptic(8)}
+          className="shrink-0 flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-surface-hover"
+          style={{ background: "var(--surface-hover)" }}
+          aria-label="Buy me a coffee"
+          title="Buy me a coffee"
+        >
+          <Gift className="h-4 w-4 text-clay" />
+        </a>
       </div>
 
       <Group title="Account & sync">
