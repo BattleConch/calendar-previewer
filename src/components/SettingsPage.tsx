@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Bell, Info, Moon, Sparkles, Vibrate, CalendarDays, Sun, Monitor, Cloud, CloudOff, LogOut } from "lucide-react";
+import { Bell, Info, Moon, Sparkles, Vibrate, CalendarDays, Sun, Monitor, Cloud, CloudOff, LogOut, NotebookPen } from "lucide-react";
 import { haptic } from "@/lib/haptics";
 import { useTheme, type ThemeMode } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
@@ -194,6 +194,17 @@ export function SettingsPage() {
         </button>
       </Group>
       <TagsManager open={tagsOpen} onClose={() => setTagsOpen(false)} />
+
+      <Group title="Navigation">
+        <Row
+          icon={<NotebookPen className="h-4 w-4" />}
+          label="Hide Notes tab"
+          hint="Home moves to the first spot in the bar"
+          value={prefs.hideNotes}
+          onChange={set("hideNotes")}
+        />
+      </Group>
+
 
       <Group title="Appearance">
 
