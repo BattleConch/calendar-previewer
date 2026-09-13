@@ -1,25 +1,24 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Bell, Info, Moon, Sparkles, Vibrate, CalendarDays, Sun, Monitor, Cloud, CloudOff, LogOut, NotebookPen, Gift } from "lucide-react";
+import { Bell, Info, Moon, CalendarDays, Sun, Monitor, Cloud, CloudOff, LogOut, NotebookPen, Gift, Clock3 } from "lucide-react";
 import { haptic } from "@/lib/haptics";
 import { useTheme, type ThemeMode } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import { useGoogleSync } from "@/lib/google-sync";
-import { notifySettingsChanged } from "@/lib/nav-prefs";
+import { notifySettingsChanged, type TimeFormat } from "@/lib/nav-prefs";
 
 import { TagsManager } from "./TagsManager";
 import { Tags } from "lucide-react";
 
 
 type Prefs = {
-  haptics: boolean;
   reminders: boolean;
-  animations: boolean;
   weekStartMonday: boolean;
   hideNotes: boolean;
+  timeFormat: TimeFormat;
 };
 
-const DEFAULTS: Prefs = { haptics: true, reminders: true, animations: true, weekStartMonday: false, hideNotes: false };
+const DEFAULTS: Prefs = { reminders: true, weekStartMonday: false, hideNotes: false, timeFormat: "12" };
 const KEY = "calendry.settings";
 
 const THEME_OPTIONS: { id: ThemeMode; label: string; Icon: typeof Sun }[] = [
@@ -56,6 +55,16 @@ export function SettingsPage() {
     });
   };
 
+  const setTimeFormat = (timeFormat: TimeFormat) => {
+    haptic(8);
+    setPrefs((p) => {
+      const next = { ...p, timeFormat };
+      try { localStorage.setItem(KEY, JSON.stringify(next)); } catch {}
+      notifySettingsChanged();
+      return next;
+    });
+  };
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 8 }}
@@ -65,10 +74,7 @@ export function SettingsPage() {
       className="px-5"
     >
       <div className="pt-1 pb-4 flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">Preferences</div>
-          <p className="mt-1 text-sm text-clay-soft">Tune how Calendry feels.</p>
-        </div>
+        <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">Preferences</div>
         <a
           href="https://www.buymeacoffee.com/battleconch"
           target="_blank"
@@ -92,11 +98,6 @@ export function SettingsPage() {
             <div className="min-w-0 flex-1">
               <div className="truncate text-[15px]">
                 {loading ? "Checking…" : user ? (user.email ?? "Signed in") : "Not signed in"}
-              </div>
-              <div className="mt-0.5 text-xs text-clay-soft">
-                {user
-                  ? "Events, tasks and notes sync live with the website."
-                  : "Sign in with Google to sync with the Calendry website."}
               </div>
             </div>
           </div>
@@ -145,15 +146,6 @@ export function SettingsPage() {
                       ? "Google connected"
                       : "Google not connected"}
                 </div>
-                <div className="mt-0.5 text-xs text-clay-soft">
-                  {!google.configured
-                    ? "Google sync isn't set up for this app yet."
-                    : google.connected
-                      ? google.syncing
-                        ? "Refreshing your Google events and tasks…"
-                        : "Your Google events and tasks refresh automatically."
-                      : "Bring your Google calendar events and tasks into Calendry."}
-                </div>
               </div>
             </div>
 
@@ -201,23 +193,10 @@ export function SettingsPage() {
           className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-surface-hover"
         >
           <span className="text-clay-soft"><Tags className="h-4 w-4" /></span>
-          <div className="min-w-0 flex-1">
-            <div className="text-[15px]">My Tags</div>
-            <div className="mt-0.5 text-xs text-clay-soft">Add, rename, recolor or remove tags</div>
-          </div>
+          <div className="min-w-0 flex-1 text-[15px]">My Tags</div>
         </button>
       </Group>
       <TagsManager open={tagsOpen} onClose={() => setTagsOpen(false)} />
-
-      <Group title="Navigation">
-        <Row
-          icon={<NotebookPen className="h-4 w-4" />}
-          label="Hide Notes tab"
-          value={prefs.hideNotes}
-          onChange={set("hideNotes")}
-        />
-      </Group>
-
 
       <Group title="Appearance">
 
@@ -226,12 +205,7 @@ export function SettingsPage() {
             <span className="text-clay-soft">
               {resolved === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
             </span>
-            <div className="flex-1 min-w-0">
-              <div className="text-[15px]">Theme</div>
-              <div className="mt-0.5 text-xs text-clay-soft">
-                {mode === "system" ? `Following your device — currently ${resolved}` : mode === "dark" ? "Cool slate night" : "Ivory & clay daylight"}
-              </div>
-            </div>
+            <div className="flex-1 min-w-0 text-[15px]">Theme</div>
           </div>
           <div
             className="mt-3 grid grid-cols-3 gap-1 rounded-2xl p-1"
@@ -265,38 +239,44 @@ export function SettingsPage() {
         </div>
       </Group>
 
-      <Group title="Feel">
-
-        <Row
-          icon={<Vibrate className="h-4 w-4" />}
-          label="Haptic feedback"
-          hint="Subtle vibrations on taps and drags"
-          value={prefs.haptics}
-          onChange={set("haptics")}
-        />
-        <Row
-          icon={<Sparkles className="h-4 w-4" />}
-          label="Motion & animations"
-          hint="Springy transitions across the app"
-          value={prefs.animations}
-          onChange={set("animations")}
-        />
-      </Group>
-
       <Group title="Calendar">
         <Row
           icon={<CalendarDays className="h-4 w-4" />}
           label="Start week on Monday"
-          hint="Otherwise weeks begin on Sunday"
           value={prefs.weekStartMonday}
           onChange={set("weekStartMonday")}
         />
         <Row
           icon={<Bell className="h-4 w-4" />}
           label="Event reminders"
-          hint="Nudge me before something begins"
           value={prefs.reminders}
           onChange={set("reminders")}
+        />
+        <div className="flex items-center gap-3 border-t px-4 py-4" style={{ borderColor: "var(--hairline)" }}>
+          <span className="text-clay-soft"><Clock3 className="h-4 w-4" /></span>
+          <div className="min-w-0 flex-1 text-[15px]">Time format</div>
+          <div className="flex rounded-xl p-1" style={{ background: "var(--surface-hover)" }}>
+            {(["12", "24"] as const).map((value) => (
+              <button
+                key={value}
+                onClick={() => setTimeFormat(value)}
+                aria-pressed={prefs.timeFormat === value}
+                className="relative min-w-16 rounded-lg px-2 py-1.5 text-xs text-clay-soft"
+              >
+                {prefs.timeFormat === value && <motion.span layoutId="time-format" className="absolute inset-0 rounded-lg bg-surface" />}
+                <span className="relative z-10">{value === "12" ? "1:00 PM" : "13:00"}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </Group>
+
+      <Group title="Navigation">
+        <Row
+          icon={<NotebookPen className="h-4 w-4" />}
+          label="Hide Notes tab"
+          value={prefs.hideNotes}
+          onChange={set("hideNotes")}
         />
       </Group>
 
@@ -306,7 +286,7 @@ export function SettingsPage() {
           <div className="flex-1">
             <div className="text-[15px]">Calendry</div>
             <div className="mt-0.5 text-xs text-clay-soft">
-              Version 1.0 · {user ? "synced to your Google account." : "stored on this device until you sign in."}
+              Version 1.0 · stored on this device until you sign in.
             </div>
 
           </div>
@@ -328,9 +308,9 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
 }
 
 function Row({
-  icon, label, hint, value, onChange,
+  icon, label, value, onChange,
 }: {
-  icon: React.ReactNode; label: string; hint?: string; value: boolean; onChange: (v: boolean) => void;
+  icon: React.ReactNode; label: string; value: boolean; onChange: (v: boolean) => void;
 }) {
   return (
     <button
@@ -340,10 +320,7 @@ function Row({
       aria-pressed={value}
     >
       <span className="text-clay-soft">{icon}</span>
-      <div className="flex-1 min-w-0">
-        <div className="text-[15px]">{label}</div>
-        {hint && <div className="mt-0.5 truncate text-xs text-clay-soft">{hint}</div>}
-      </div>
+      <div className="flex-1 min-w-0 text-[15px]">{label}</div>
       <Switch on={value} />
     </button>
   );
