@@ -71,7 +71,6 @@ export function AuthPage() {
         <button
           onClick={async () => {
             haptic(8); setError(null); setBusy(true);
-            if (mode === "signup") markOnboardingPending();
             const res = await signInWithGoogle();
             if (res.error) setError(res.error);
             setBusy(false);

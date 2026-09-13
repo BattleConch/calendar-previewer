@@ -28,6 +28,9 @@ const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
 export function CalendarApp() {
   const { styleOf } = useTags();
   const [tab, setTab] = useState<Tab>("home");
+  // Rendered after mount so the server/client date can never mismatch.
+  const [todayLabel, setTodayLabel] = useState("");
+  useEffect(() => { setTodayLabel(format(new Date(), "EEEE, MMM d")); }, []);
   const [cursor, setCursor] = useState<Date>(new Date());
   const [selected, setSelected] = useState<Date>(new Date());
   const [daySheetOpen, setDaySheetOpen] = useState(false);
@@ -153,7 +156,7 @@ export function CalendarApp() {
               transition={{ duration: 0.22 }}
             >
               <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">
-                {format(new Date(), "EEEE, MMM d")}
+                {todayLabel}
               </div>
               <h1 className="font-serif text-4xl tracking-tight">
                 {tab === "tasks" ? "Tasks" : tab === "notes" ? "Notes" : tab === "settings" ? "Settings" : "Calendry"}
@@ -364,7 +367,7 @@ export function CalendarApp() {
         editingId={editingTaskId}
       />
       <UndoToast />
-      <Onboarding onFinish={() => setTab("tasks")} />
+      <Onboarding onFinish={() => setTab("home")} />
 
       <NoteEditor
         open={noteEditorOpen}

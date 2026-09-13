@@ -30,7 +30,10 @@ export function Onboarding({ onFinish }: { onFinish?: () => void }) {
     try {
       const pending = localStorage.getItem(PENDING_KEY) === "1";
       const done = localStorage.getItem(doneKey(user.id)) === "1";
-      if (!done && pending) setOpen(true);
+      // Brand-new accounts (e.g. first Google sign-in) get the guide once.
+      const createdAt = (user as { created_at?: string }).created_at;
+      const isNew = createdAt ? Date.now() - new Date(createdAt).getTime() < 10 * 60 * 1000 : false;
+      if (!done && (pending || isNew)) setOpen(true);
     } catch { /* ignore */ }
   }, [user]);
 

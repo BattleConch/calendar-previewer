@@ -199,7 +199,6 @@ export function SettingsPage() {
         <Row
           icon={<NotebookPen className="h-4 w-4" />}
           label="Hide Notes tab"
-          hint="Home moves to the first spot in the bar"
           value={prefs.hideNotes}
           onChange={set("hideNotes")}
         />
@@ -317,7 +316,7 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
 function Row({
   icon, label, hint, value, onChange,
 }: {
-  icon: React.ReactNode; label: string; hint: string; value: boolean; onChange: (v: boolean) => void;
+  icon: React.ReactNode; label: string; hint?: string; value: boolean; onChange: (v: boolean) => void;
 }) {
   return (
     <button
@@ -329,7 +328,7 @@ function Row({
       <span className="text-clay-soft">{icon}</span>
       <div className="flex-1 min-w-0">
         <div className="text-[15px]">{label}</div>
-        <div className="mt-0.5 truncate text-xs text-clay-soft">{hint}</div>
+        {hint && <div className="mt-0.5 truncate text-xs text-clay-soft">{hint}</div>}
       </div>
       <Switch on={value} />
     </button>
