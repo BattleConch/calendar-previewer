@@ -105,7 +105,7 @@ export function NoteEditor({
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={{ top: 0, bottom: 0.4 }}
             onDragEnd={(_, info) => { if (info.offset.y > 120) dismiss(); }}
-            className="fixed inset-x-0 bottom-0 z-50 flex max-h-[92dvh] min-h-[50dvh] flex-col overflow-hidden rounded-t-[2rem] bg-ivory"
+            className={`fixed inset-x-0 bottom-0 z-50 flex max-h-[92dvh] flex-col overflow-hidden rounded-t-[2rem] bg-ivory ${mode === "edit" ? "h-[92dvh] min-h-[92dvh]" : "min-h-[50dvh]"}`}
             style={{
               boxShadow: "0 -20px 60px -20px rgba(74,63,53,0.35)",
               border: warn ? "2px solid var(--tag-red)" : "2px solid transparent",

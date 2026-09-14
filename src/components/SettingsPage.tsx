@@ -274,7 +274,7 @@ export function SettingsPage() {
       <Group title="Navigation">
         <Row
           icon={<NotebookPen className="h-4 w-4" />}
-          label="Hide Notes tab"
+          label="Disable notes"
           value={prefs.hideNotes}
           onChange={set("hideNotes")}
         />
