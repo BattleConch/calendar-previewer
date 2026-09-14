@@ -305,17 +305,16 @@ export function CalendarApp() {
                             <div className="truncate text-[15px]">{e.title}</div>
                             <div className="text-xs text-clay-soft">{e.allDay ? "All-day" : `${formatTime(e.start, timeFormat)} – ${formatTime(e.end, timeFormat)}`}</div>
                           </div>
-                          <span className="rounded-full px-2 py-0.5 text-[10px] uppercase tracking-widest"
-                            style={{ background: s.bg, color: s.text }}>
-                            {s.label}
-                          </span>
+                          {e.tag && (
+                            <span className="rounded-full px-2 py-0.5 text-[10px] uppercase tracking-widest"
+                              style={{ background: s.bg, color: s.text }}>
+                              {s.label}
+                            </span>
+                          )}
                         </motion.button>
                       );
                     })}
                   </AnimatePresence>
-                  {selectedEvents.length > 3 && (
-                    <div className="pt-1 text-center text-xs text-clay-muted">+ {selectedEvents.length - 3} more</div>
-                  )}
                 </div>
                 {!hintSeen && <SwipeHint />}
               </motion.div>
