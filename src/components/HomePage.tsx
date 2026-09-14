@@ -56,11 +56,11 @@ export function HomePage({
   const timeFormat = useTimeFormat();
   const dotOf = (tag?: TagColor) => (tag ? styleOf(tag).dot : "var(--clay-muted)");
 
-  const now = mounted ? new Date() : new Date("2020-01-05T12:00:00.000Z");
-  const hour = now.getHours();
   const [mounted, setMounted] = useState(false);
   const [order, setOrder] = useState<WidgetId[]>(DEFAULT_ORDER);
   const [arranging, setArranging] = useState(false);
+  const now = mounted ? new Date() : new Date("2020-01-05T12:00:00.000Z");
+  const hour = now.getHours();
 
   useEffect(() => {
     setMounted(true);
