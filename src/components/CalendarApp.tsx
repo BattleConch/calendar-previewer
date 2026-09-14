@@ -266,7 +266,10 @@ export function CalendarApp() {
                   <div className="h-1.5 w-12 rounded-full" style={{ background: "var(--hairline)" }} />
                 </div>
 
-                <div className="flex items-baseline justify-between">
+                <div
+                  onPointerDown={(e) => dayDrag.start(e)}
+                  className="-mx-2 flex cursor-grab touch-none items-baseline justify-between rounded-2xl px-2 py-1 active:cursor-grabbing"
+                >
                   <div>
                     <div className="text-xs uppercase tracking-widest text-clay-soft">{format(selected, "EEEE")}</div>
                     <div className="font-serif text-2xl">{format(selected, "MMMM d")}</div>
@@ -279,12 +282,12 @@ export function CalendarApp() {
                     Open day
                   </button>
                 </div>
-                <div className="mt-4 space-y-2">
+                <div className="mt-4 max-h-[264px] space-y-2 overflow-y-auto overscroll-contain pr-1">
                   {selectedEvents.length === 0 && (
                     <div className="hairline-t pt-4 text-sm text-clay-muted">A quiet day. Tap + to add something.</div>
                   )}
                   <AnimatePresence initial={false}>
-                    {selectedEvents.slice(0, 3).map((e, i) => {
+                    {selectedEvents.map((e, i) => {
                       const s = styleOf(e.tag);
                       return (
                         <motion.button
