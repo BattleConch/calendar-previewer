@@ -9,7 +9,7 @@ import { MyTagsButton } from "./TagsManager";
 import { useTasks } from "@/lib/tasks-store";
 import { useNotes } from "@/lib/notes-store";
 import { haptic } from "@/lib/haptics";
-import { formatTime, useTimeFormat } from "@/lib/nav-prefs";
+import { formatTime, useHideNotes, useTimeFormat } from "@/lib/nav-prefs";
 import type { Tab } from "./BottomNav";
 
 const iso = (d: Date) => format(d, "yyyy-MM-dd");
@@ -54,6 +54,7 @@ export function HomePage({
   const { notes } = useNotes();
   const { styleOf } = useTags();
   const timeFormat = useTimeFormat();
+  const hideNotes = useHideNotes();
   const dotOf = (tag?: TagColor) => (tag ? styleOf(tag).dot : "var(--clay-muted)");
 
   const [mounted, setMounted] = useState(false);
@@ -259,8 +260,20 @@ export function HomePage({
         </div>
       </div>
 
-      <Reorder.Group axis="y" values={order} onReorder={setOrder} className="space-y-4">
-        {order.map((id) => (
+      <Reorder.Group
+        axis="y"
+        values={visibleOrder}
+        onReorder={(next: WidgetId[]) => {
+          if (!hideNotes) { setOrder(next); return; }
+          // Keep the hidden Notes widget in its saved spot so nothing is lost.
+          const at = Math.min(order.indexOf("notes"), next.length);
+          const merged = [...next];
+          merged.splice(at < 0 ? merged.length : at, 0, "notes");
+          setOrder(merged);
+        }}
+        className="space-y-4"
+      >
+        {visibleOrder.map((id) => (
           <WidgetItem key={id} id={id} arranging={arranging} {...content[id]} />
         ))}
       </Reorder.Group>
