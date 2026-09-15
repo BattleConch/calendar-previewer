@@ -9,6 +9,7 @@ import { haptic } from "@/lib/haptics";
 import { ConfirmDelete, DetailActions, PreviewRow, TagBadge, UnsavedChanges } from "./DetailChrome";
 import { RemindersField } from "./RemindersField";
 import { TASK_REMINDERS } from "@/lib/notifications";
+import { KindSwitch, type CreateKind } from "./KindSwitch";
 
 
 
@@ -18,10 +19,14 @@ export function TaskEditor({
   open,
   onClose,
   editingId,
+  onSwitchKind,
+  showNoteOption = true,
 }: {
   open: boolean;
   onClose: () => void;
   editingId: string | null;
+  onSwitchKind?: (kind: CreateKind) => void;
+  showNoteOption?: boolean;
 }) {
   const { tasks, add, update, remove } = useTasks();
   const existing = editingId ? tasks.find((t) => t.id === editingId) : null;
@@ -111,9 +116,13 @@ export function TaskEditor({
               <span className="h-1.5 w-10 rounded-full bg-hairline" />
             </div>
             <div className="flex items-center justify-between px-6 pt-3">
-              <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">
-                {mode === "preview" ? "Task" : existing ? "Edit task" : "New task"}
-              </div>
+              {!existing && onSwitchKind ? (
+                <KindSwitch value="task" onChange={onSwitchKind} showNote={showNoteOption} />
+              ) : (
+                <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">
+                  {mode === "preview" ? "Task" : "Edit task"}
+                </div>
+              )}
               {mode === "preview" && existing ? (
                 <DetailActions onEdit={() => setMode("edit")} onDelete={() => setConfirming(true)} onClose={onClose} />
               ) : (

@@ -9,6 +9,7 @@ import { ConfirmDelete, DetailActions, TagBadge, UnsavedChanges } from "./Detail
 
 import { filesToDataUrls } from "@/lib/images";
 import { haptic } from "@/lib/haptics";
+import { KindSwitch, type CreateKind } from "./KindSwitch";
 
 
 
@@ -17,10 +18,12 @@ export function NoteEditor({
   open,
   onClose,
   editingId,
+  onSwitchKind,
 }: {
   open: boolean;
   onClose: () => void;
   editingId: string | null;
+  onSwitchKind?: (kind: CreateKind) => void;
 }) {
   const { notes, add, update, remove } = useNotes();
   const existing = editingId ? notes.find((n) => n.id === editingId) : null;
@@ -115,9 +118,13 @@ export function NoteEditor({
               <span className="h-1.5 w-10 rounded-full bg-hairline" />
             </div>
             <div className="flex items-center justify-between px-6 pt-3">
-              <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">
-                {mode === "preview" ? "Note" : existing ? "Edit note" : "New note"}
-              </div>
+              {!existing && onSwitchKind ? (
+                <KindSwitch value="note" onChange={onSwitchKind} />
+              ) : (
+                <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">
+                  {mode === "preview" ? "Note" : "Edit note"}
+                </div>
+              )}
               {mode === "preview" && existing ? (
                 <DetailActions onEdit={() => setMode("edit")} onDelete={() => setConfirming(true)} onClose={onClose} />
               ) : (

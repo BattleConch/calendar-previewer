@@ -11,6 +11,7 @@ import { EVENT_REMINDERS } from "@/lib/notifications";
 import { deleteGoogleEvent } from "@/lib/google-calendar.functions";
 import { haptic } from "@/lib/haptics";
 import { formatTime, useTimeFormat } from "@/lib/nav-prefs";
+import { KindSwitch, type CreateKind } from "./KindSwitch";
 
 
 
@@ -23,6 +24,8 @@ export function EventEditor({
   defaultDate,
   defaultStart = "09:00",
   defaultEnd = "10:00",
+  onSwitchKind,
+  showNoteOption = true,
 }: {
   open: boolean;
   onClose: () => void;
@@ -30,6 +33,8 @@ export function EventEditor({
   defaultDate: string;
   defaultStart?: string;
   defaultEnd?: string;
+  onSwitchKind?: (kind: CreateKind) => void;
+  showNoteOption?: boolean;
 }) {
   const { events, add, update, remove } = useEvents();
   const timeFormat = useTimeFormat();
@@ -157,9 +162,13 @@ export function EventEditor({
                 <span className="h-1.5 w-10 rounded-full bg-hairline" />
               </div>
               <div className="flex items-center justify-between px-6 pt-3">
-                <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">
-                  {mode === "preview" ? "Event" : existing ? "Edit" : "New"}
-                </div>
+                {!existing && onSwitchKind ? (
+                  <KindSwitch value="event" onChange={onSwitchKind} showNote={showNoteOption} />
+                ) : (
+                  <div className="text-xs uppercase tracking-[0.24em] text-clay-soft">
+                    {mode === "preview" ? "Event" : "Edit"}
+                  </div>
+                )}
                 {mode === "preview" && existing ? (
                   <DetailActions
                     onEdit={() => setMode("edit")}
