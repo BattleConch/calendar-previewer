@@ -21,7 +21,8 @@ import { Onboarding } from "./Onboarding";
 import { useReminderScheduler } from "@/lib/notifications";
 
 import { haptic } from "@/lib/haptics";
-import { formatTime, useTimeFormat } from "@/lib/nav-prefs";
+import { formatTime, useHideNotes, useTimeFormat } from "@/lib/nav-prefs";
+import { type CreateKind } from "./KindSwitch";
 
 const iso = (d: Date) => format(d, "yyyy-MM-dd");
 const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
@@ -101,6 +102,18 @@ export function CalendarApp() {
   const openEditTask = (id: string | null) => { setEditingTaskId(id); setTaskEditorOpen(true); };
   const openNewNote = () => { setEditingNoteId(null); setNoteEditorOpen(true); };
   const openEditNote = (id: string | null) => { setEditingNoteId(id); setNoteEditorOpen(true); };
+
+  const hideNotes = useHideNotes();
+
+  // Switch the create sheet between Event / Task / Note without leaving it.
+  const switchKind = (kind: CreateKind) => {
+    setEditorOpen(false); setTaskEditorOpen(false); setNoteEditorOpen(false);
+    setEditingId(null); setEditingTaskId(null); setEditingNoteId(null);
+    if (kind !== "event") setDraftTimes(null);
+    if (kind === "event") setEditorOpen(true);
+    else if (kind === "task") setTaskEditorOpen(true);
+    else setNoteEditorOpen(true);
+  };
 
   const fabAction =
     tab === "tasks" ? openNewTask : tab === "notes" ? openNewNote : openNew;
@@ -363,12 +376,16 @@ export function CalendarApp() {
         defaultDate={iso(selected)}
         defaultStart={draftTimes?.start}
         defaultEnd={draftTimes?.end}
+        onSwitchKind={switchKind}
+        showNoteOption={!hideNotes}
       />
 
       <TaskEditor
         open={taskEditorOpen}
         onClose={() => setTaskEditorOpen(false)}
         editingId={editingTaskId}
+        onSwitchKind={switchKind}
+        showNoteOption={!hideNotes}
       />
       <UndoToast />
       <Onboarding onFinish={() => setTab("home")} />
@@ -377,6 +394,7 @@ export function CalendarApp() {
         open={noteEditorOpen}
         onClose={() => setNoteEditorOpen(false)}
         editingId={editingNoteId}
+        onSwitchKind={switchKind}
       />
     </div>
   );
