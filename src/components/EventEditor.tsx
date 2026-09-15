@@ -23,6 +23,8 @@ export function EventEditor({
   defaultDate,
   defaultStart = "09:00",
   defaultEnd = "10:00",
+  onSwitchKind,
+  showNoteOption = true,
 }: {
   open: boolean;
   onClose: () => void;
@@ -30,6 +32,8 @@ export function EventEditor({
   defaultDate: string;
   defaultStart?: string;
   defaultEnd?: string;
+  onSwitchKind?: (kind: CreateKind) => void;
+  showNoteOption?: boolean;
 }) {
   const { events, add, update, remove } = useEvents();
   const timeFormat = useTimeFormat();
