@@ -232,6 +232,9 @@ export function HomePage({
     },
   };
 
+  // Hide the Notes widget when disabled, without losing its saved position.
+  const visibleOrder = hideNotes ? order.filter((id) => id !== "notes") : order;
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 8 }}
