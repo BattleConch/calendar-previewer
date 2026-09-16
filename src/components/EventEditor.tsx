@@ -12,6 +12,7 @@ import { deleteGoogleEvent } from "@/lib/google-calendar.functions";
 import { haptic } from "@/lib/haptics";
 import { formatTime, useTimeFormat } from "@/lib/nav-prefs";
 import { KindSwitch, type CreateKind } from "./KindSwitch";
+import { TimeSelect } from "./TimeSelect";
 
 
 
@@ -271,7 +272,7 @@ export function EventEditor({
                         transition={{ duration: 0.18 }}
                       >
                         <Field label="Starts">
-                          <input type="time" value={start} onChange={(e) => setStart(e.target.value)} className={inputCls} />
+                          <TimeSelect ariaLabel="Start time" value={start} onChange={setStart} />
                         </Field>
                       </motion.div>
                       <motion.div
@@ -282,7 +283,7 @@ export function EventEditor({
                         transition={{ duration: 0.18 }}
                       >
                         <Field label="Ends">
-                          <input type="time" value={end} onChange={(e) => setEnd(e.target.value)} className={inputCls} />
+                          <TimeSelect ariaLabel="End time" value={end} onChange={setEnd} />
                         </Field>
                       </motion.div>
                     </>
