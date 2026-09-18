@@ -23,11 +23,20 @@ import { useReminderScheduler } from "@/lib/notifications";
 import { haptic } from "@/lib/haptics";
 import { formatTime, useHideNotes, useTimeFormat } from "@/lib/nav-prefs";
 import { type CreateKind } from "./KindSwitch";
+import { useIsDesktop } from "@/hooks/use-desktop";
+import { DesktopShell } from "./desktop/DesktopShell";
 
 const iso = (d: Date) => format(d, "yyyy-MM-dd");
 const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
 
+/** Phones and tablets keep the touch app; wide screens get the desktop shell. */
 export function CalendarApp() {
+  const isDesktop = useIsDesktop();
+  if (isDesktop === undefined) return <div className="min-h-[100dvh] w-full bg-ivory" />;
+  return isDesktop ? <DesktopShell /> : <CalendarAppMobile />;
+}
+
+function CalendarAppMobile() {
   const { styleOf } = useTags();
   const timeFormat = useTimeFormat();
   const [tab, setTab] = useState<Tab>("home");
